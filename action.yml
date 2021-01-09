@@ -1,0 +1,28 @@
+name: 'Slack File Upload'
+
+description: 'Uploads file to slack'
+inputs:
+  token: 
+    description: 'Slack token'
+    required: true
+  channels:
+    description: 'Slack channels'
+    required: true
+  file-path:
+    description: 'Path to file'
+    required: true
+  file-name: 
+    description: 'Filename of file'
+    required: false
+  file-type:
+    description: 'A file type identifier.'
+    required: false
+  title:
+    description: 'Title of the message'
+    required: false 
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: file
+  color: red
