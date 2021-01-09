@@ -6,9 +6,6 @@ async function run() {
   const token = core.getInput('token') || '';
   const channels = core.getInput('channels') || '';
   const filePath = core.getInput('file-path') || '';
-  var fileName = core.getInput('file-name') || '';
-  var fileType = core.getInput('file-type') || '';
-  const title = core.getInput('title') || 'New Slack Upload from Github Action';
 
   if (!token || !channels || !filePath) {
     console.log('token: ', token);
@@ -17,15 +14,11 @@ async function run() {
     core.setFailed('token, channels and file-path must be specified.');
   }
 
-  if (!fileName) {
-    fileName = path.parse(filePath).name;
-  }
+  var fileName = core.getInput('file-name') || path.parse(filePath).name;
+  var fileType = core.getInput('file-type') || path.parse(filePath).ext;
+  const title = core.getInput('title') || 'New Slack Upload from Github Action';
 
-  if (!fileType) {
-    fileType = path.parse(filePath).ext;
-  }
-
-  slack.upload(token, channels, fileName, fileType, filePath, title);
+  slack.upload(token, channels, filePath, fileName, fileType, title);
 }
 
 run();

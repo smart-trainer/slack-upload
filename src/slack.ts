@@ -6,27 +6,32 @@ import {WebClient, LogLevel} from '@slack/web-api';
 export async function upload(
   slackToken: string,
   channels: string,
+  filePath: string,
   fileName: string,
   fileType: string,
-  filePath: string,
   title: string
-) {
+): Promise<String> {
   try {
     const client = new WebClient(slackToken, {logLevel: LogLevel.DEBUG});
 
+    const file = fs.readFileSync(filePath);
     const result = await client.files.upload({
       channels: channels,
-      file: fs.readFileSync(filePath),
+      file: file,
       filename: fileName,
       filetype: fileType,
       title: title
     });
     if (result.ok == false) {
       core.setFailed(result.error ?? 'unknown error');
-      return;
+      return Promise.resolve(result.error ?? 'unknown error');
     }
-    core.setOutput('response', JSON.stringify(result));
+    const response = JSON.stringify(result);
+    core.setOutput('response', response);
+
+    return Promise.resolve(response);
   } catch (error) {
     core.setFailed(error.message);
+    return Promise.resolve(error.message);
   }
 }
