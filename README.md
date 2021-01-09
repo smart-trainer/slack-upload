@@ -59,9 +59,9 @@ jobs:
         uses: actions/checkout@v1
       - run: echo "Test file " > test.txt
       - name: Upload to slack step
-        uses: adrey/slack-file-upload-action@master
+        uses: smart-trainer/slack-upload@v1
         with:
-          token: ${{ secrets.SLACK_TOKEN }}
+          token: ${{ secrets.SLACK_UPLOAD_TOKEN }}
           channel: random
           file-path: test.txt
 ```
