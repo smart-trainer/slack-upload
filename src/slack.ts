@@ -1,8 +1,7 @@
 import * as core from '@actions/core';
-import * as slack from '@slack/web-api';
 import * as fs from 'fs';
 
-export const slackUrl = 'https://slack.com/api/files.upload';
+import {WebClient, LogLevel} from '@slack/web-api';
 
 export async function upload(
   slackToken: string,
@@ -13,7 +12,7 @@ export async function upload(
   title: string
 ) {
   try {
-    const client = new slack.WebClient(slackToken, {slackApiUrl: slackUrl});
+    const client = new WebClient(slackToken, {logLevel: LogLevel.DEBUG});
 
     const result = await client.files.upload({
       channels: channels,

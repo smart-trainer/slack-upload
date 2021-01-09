@@ -44,9 +44,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
-const upload = __importStar(__webpack_require__(4831));
 const path = __importStar(__webpack_require__(5622));
+const core = __importStar(__webpack_require__(2186));
+const slack = __importStar(__webpack_require__(568));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const token = core.getInput('token') || '';
@@ -56,7 +56,10 @@ function run() {
         var fileType = core.getInput('file-type') || '';
         const title = core.getInput('title') || 'New Slack Upload from Github Action';
         if (!token || !channels || !filePath) {
-            core.setFailed('token and/or file-path must be specified.');
+            console.log('token: ', token);
+            console.log('channels: ', channels);
+            console.log('file-path: ', filePath);
+            core.setFailed('token, channels and file-path must be specified.');
         }
         if (!fileName) {
             fileName = path.parse(filePath).name;
@@ -64,7 +67,7 @@ function run() {
         if (!fileType) {
             fileType = path.parse(filePath).ext;
         }
-        upload.upload(token, channels, fileName, fileType, filePath, title);
+        slack.upload(token, channels, fileName, fileType, filePath, title);
     });
 }
 run();
@@ -72,7 +75,7 @@ run();
 
 /***/ }),
 
-/***/ 4831:
+/***/ 568:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -106,16 +109,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.upload = exports.slackUrl = void 0;
+exports.upload = void 0;
 const core = __importStar(__webpack_require__(2186));
-const slack = __importStar(__webpack_require__(431));
 const fs = __importStar(__webpack_require__(5747));
-exports.slackUrl = 'https://slack.com/api/files.upload';
+const web_api_1 = __webpack_require__(431);
 function upload(slackToken, channels, fileName, fileType, filePath, title) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const client = new slack.WebClient(slackToken, { slackApiUrl: exports.slackUrl });
+            const client = new web_api_1.WebClient(slackToken, { logLevel: web_api_1.LogLevel.DEBUG });
             const result = yield client.files.upload({
                 channels: channels,
                 file: fs.readFileSync(filePath),
@@ -3256,7 +3258,7 @@ module.exports = function xhrAdapter(config) {
 var utils = __webpack_require__(328);
 var bind = __webpack_require__(7065);
 var Axios = __webpack_require__(8178);
-var mergeConfig = __webpack_require__(7048);
+var mergeConfig = __webpack_require__(4831);
 var defaults = __webpack_require__(8190);
 
 /**
@@ -3426,7 +3428,7 @@ var utils = __webpack_require__(328);
 var buildURL = __webpack_require__(646);
 var InterceptorManager = __webpack_require__(3214);
 var dispatchRequest = __webpack_require__(5062);
-var mergeConfig = __webpack_require__(7048);
+var mergeConfig = __webpack_require__(4831);
 
 /**
  * Create a new instance of Axios
@@ -3770,7 +3772,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ 7048:
+/***/ 4831:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";

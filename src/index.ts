@@ -1,6 +1,6 @@
-import * as core from '@actions/core';
-import * as upload from './upload';
 import * as path from 'path';
+import * as core from '@actions/core';
+import * as slack from './slack';
 
 async function run() {
   const token = core.getInput('token') || '';
@@ -11,7 +11,10 @@ async function run() {
   const title = core.getInput('title') || 'New Slack Upload from Github Action';
 
   if (!token || !channels || !filePath) {
-    core.setFailed('token and/or file-path must be specified.');
+    console.log('token: ', token);
+    console.log('channels: ', channels);
+    console.log('file-path: ', filePath);
+    core.setFailed('token, channels and file-path must be specified.');
   }
 
   if (!fileName) {
@@ -22,7 +25,7 @@ async function run() {
     fileType = path.parse(filePath).ext;
   }
 
-  upload.upload(token, channels, fileName, fileType, filePath, title);
+  slack.upload(token, channels, fileName, fileType, filePath, title);
 }
 
 run();
