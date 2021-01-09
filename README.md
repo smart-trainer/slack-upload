@@ -62,6 +62,6 @@ jobs:
         uses: smart-trainer/slack-upload@v1
         with:
           token: ${{ secrets.SLACK_UPLOAD_TOKEN }}
-          channel: random
+          channels: random
           file-path: test.txt
 ```
