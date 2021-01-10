@@ -1,6 +1,6 @@
 {
   "name": "slack-upload",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Github action for uploading files to slack",
   "main": "lib/index.js",
   "scripts": {
