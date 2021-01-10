@@ -1,0 +1,25 @@
+name: Debug
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'post message as text file to slack'
+        required: true
+        default: 'Hello World!'
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: 'echo ${{ github.event.inputs.message }} > test.txt'
+      - uses: ./
+        with:
+          id: upload
+          token: ${{ secrets.SLACK_UPLOAD_TOKEN }}
+          channels: app
+          file-path: 'test.txt'
+          file-name: 'message.txt'
+          file-type: 'text'
+          title: 'Test post by smart trainer slack-upload'
